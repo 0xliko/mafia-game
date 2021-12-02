@@ -1,0 +1,107 @@
+.role-list {
+    display: flex;
+    flex-flow: row wrap;
+    min-height: 66px;
+    margin-bottom: 15px;
+}
+
+.role-cell {
+    display: none;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin: 10px 10px 0px 0px;
+    padding: 8px;
+    border-radius: 3px;
+    background-color: white;
+    color: black;
+}
+
+.role-pop {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.rolesets-wrapper {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    margin: 0px 10px;
+}
+
+.roleset-list {
+    display: flex;
+    flex-flow: column;
+}
+
+.roleset {
+    display: flex;
+    flex-flow: row nowrap;
+    align-content: center;
+    position: relative;
+    min-height: 55px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.roleset-sel {
+    background-color: #dddddd;
+}
+
+.roleset .setup {
+    flex: 1;
+    flex-flow: row wrap;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.roleset .role {
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.setup-open {
+    align-self: center;
+}
+
+.fa-plus-circle, .fa-times-circle {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.delete-roleset {
+    position: absolute;
+    right: 10px;
+}
+
+.check-wrap {
+    display: flex;
+    justify-content: center;
+    flex: 1 1 auto;
+    background-color: white;
+    padding: 7px;
+    border: 1px solid #ced4da;
+    border-radius: 0px 3px 3px 0px;
+}
+
+.check-icon {
+    font-size: 25px;
+    color: #7289da;
+    cursor: pointer;
+}
+
+.checkbox {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .form-wrapper {
+        flex-flow: column;
+    }
+
+    .rolesets-wrapper {
+        margin: 0px;
+    }
+}

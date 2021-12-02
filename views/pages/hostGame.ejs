@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <meta name="description" content="Host a game of mafia">
+        <link rel='stylesheet' href='/stylesheets/host.css' />
+        <title>Create Game | Cryptomafia</title>
+    </head>
+    <body>
+        <div class='site-wrapper'>
+            <div class='main-container'>
+                <%- include('../partials/navbar', {dId: dId, route: 'host'}); %>
+                <%- include('../partials/alert', {
+                    show: {
+                        notif: inGame != null ? true : false
+                    }, msg: {
+                        notif: `Return to game <a href='/game/${inGame}'>${inGame}</a>, or <a href='#' class='leave'>leave</a>`
+                    }
+                }); %>
+
+                <div class='inner-container'>
+                    <h1>Host Game</h1>
+                    <div class='search-nav'>
+                        <div class='btn-wrapper'>
+                            <div class='btn-group'>
+                                <button type='button' class='btn btn-white setup-btn raydium-theme-button ' data-path='featured'>Featured</button>
+                                <button type='button' class='btn btn-white setup-btn raydium-theme-button' data-path='popular'>Popular</button>
+                                <% if (dId) { %>
+                                <button type='button' class='btn btn-white setup-btn raydium-theme-button' data-path='favorites'>Favorites</button>
+                                <button type='button' class='btn btn-white setup-btn raydium-theme-button' data-path='created'>Yours</button>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class='search-wrapper'>
+                            <div class='input-group setup-search'>
+                                <input type='text' class='form-control' placeholder='Setup Name' />
+                                <div class='input-group-append'>
+                                    <div class='input-group-text'>
+                                        <i class='fas fa-search'></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='setup-list'></div>
+                    <div class='pagination-wrapper'></div>
+                    <% if (dId) { %>
+                    <div class='form-wrapper'>
+                        <form class='create-game'>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Setup</span>
+                                </div>
+                                <input type='text' class='form-control game-setup' disabled />
+                            </div>
+                            <input type='hidden' class='game-setup-id' />
+                            <!--
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Ranked</span>
+                                </div>
+                                <select class='form-control ranked'>
+                                    <option value='no'>
+                                        No
+                                    </option>
+                                    <option value='yes'>
+                                        Yes
+                                    </option>
+                                </select>
+                            </div>
+                        -->
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Private</span>
+                                </div>
+                                <select class='form-control private'>
+                                    <option value='no'>
+                                        No
+                                    </option>
+                                    <option value='yes'>
+                                        Yes
+                                    </option>
+                                </select>
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Day Length (minutes)</span>
+                                </div>
+                                <input type='number' class='form-control day-length' min='1' max='10' value='5' data-last-val='10' />
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Night Length (minutes)</span>
+                                </div>
+                                <input type='number' class='form-control night-length' min='1' max='10' value='2' data-last-val='2' />
+                            </div>
+                            <div class='form-group'>
+                                <button type='submit' class='create-game-btn btn btn-success'>Host</button>
+                            </div>
+                        </form>
+                    </div>
+                    <% } %>
+                </div>
+                <% include ../partials/footer %>
+            </div>
+        </div>
+
+        <% include ../partials/scripts %>
+        <script>
+            var favorites = <%- JSON.stringify(favorites || '[]') %>;
+            var loggedIn = <%- dId != null %>;
+        </script>
+        <script src='/javascript/hostGame.js'></script>
+    </body>
+</html>

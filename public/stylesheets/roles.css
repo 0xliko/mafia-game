@@ -1,0 +1,259 @@
+.role-null {
+    background-image: url('/images/roles/unknown.png');
+}
+
+/* Roles w/o icons */
+
+.role-Silhouette {
+    background-image: url('/images/roles/Silhouette.png');
+}
+
+/* Village */
+
+.role-Villager {
+    border: 3px solid #b14ed9;
+    background-image: url('/images/roles/villager.png');
+}
+
+.role-Doctor {
+    border: 3px solid #f20505;
+    background-image: url('/images/roles/doctor.png');
+}
+
+.role-Cop {
+    border: 3px solid #4287f5;
+    background-image: url('/images/roles/cop.png');
+}
+
+.role-Arms-Dealer {
+    border: 3px solid #9c9c9c;
+    background-image: url('/images/roles/arms_dealer.png');
+}
+
+.role-Oracle {
+    border: 3px solid #1db837;
+    background-image: url('/images/roles/oracle.png');
+}
+
+.role-Bomb {
+    border: 3px solid #000000;
+    background-image: url('/images/roles/bomb.png');
+}
+
+.role-Sheriff {
+    border: 3px solid #7d5b3c;
+    background-image: url('/images/roles/sheriff.png');
+}
+
+.role-Deputy {
+    border: 3px solid #96785c;
+    background-image: url('/images/roles/deputy.png');
+}
+
+.role-Vigilante {
+    border: 3px solid #0037ff;
+    background-image: url('/images/roles/vigilante.png');
+}
+
+.role-Archer {
+    border: 3px solid #7de3dc;
+    background-position: -300px 0;
+    background-image: url('/images/roles/archer.png');
+}
+
+.role-Agent {
+    border: 3px solid #6cd492;
+    background-image: url('/images/roles/agent.png');
+}
+
+.role-Suspect {
+    border: 3px solid #dae3dd;
+    background-image: url('/images/roles/suspect.png');
+}
+
+.role-Tracker {
+    border: 3px solid #d1265c;
+    background-image: url('/images/roles/tracker.png');
+}
+
+.role-Watcher {
+    border: 3px solid #ccd91c;
+    background-image: url('/images/roles/watcher.png');
+}
+
+.role-Seer {
+    border: 3px solid #878784;
+    background-image: url('/images/roles/seer.png');
+}
+
+.role-Babushka {
+    border: 3px solid #61857a;
+    background-image: url('/images/roles/baushka.png');
+}
+
+.role-Illuminato {
+    border: 3px solid #22ff00;
+    background-image: url('/images/roles/illuminato.png');
+}
+
+.role-Blacksmith {
+    border: 3px solid #162526;
+    background-image: url('/images/roles/blacksmith.png');
+}
+
+.role-Monkey {
+    border: 3px solid #b89a2e;
+    background-position: -30px -80px;
+    background-image: url('/images/roles/monkey.png');
+}
+
+.role-Village-Idiot {
+    border: 3px solid #400d19;
+    background-image: url('/images/roles/village_idiot.png');
+}
+
+.role-Escort {
+    border: 3px solid #68e393;
+    background-image: url('/images/roles/escort.png');
+}
+
+.role-Warden {
+    border: 3px solid #68e393;
+    background-image: url('/images/roles/warden.png');
+}
+
+.role-Trapper {
+
+    background-image: url('/images/roles/trapper.png');
+}
+
+.role-Governor {
+    background-image: url('/images/roles/governor.png');
+}
+
+.role-Priest {
+    background-image: url('/images/roles/Priest.png');
+}
+
+.role-Charon {
+    background-image: url('/images/roles/charon.png');
+}
+
+.role-Knight {
+    background-image: url('/images/roles/knight.png');
+}
+
+.role-Medic {
+    background-image: url('/images/roles/medic.png');
+}
+
+/* Mafia */
+
+.role-Mafioso {
+    border: 3px solid #c43e23;
+    background-image: url('/images/roles/mafioso.png');
+}
+
+.role-Hooker {
+    border: 3px solid #24edea;
+    background-image: url('/images/roles/hooker(mafia).png');
+}
+
+.role-Spy {
+    background-image: url('/images/roles/spy.png');
+}
+
+.role-Godfather {
+    background-image: url('/images/roles/godgather.png');
+}
+
+.role-Telepath {
+    background-image: url('/images/roles/telepath.png');
+}
+
+.role-Chemist {
+    background-image: url('/images/roles/chemist.png');
+}
+
+.role-Deafener {
+    background-image: url('/images/roles/deafener.png');
+}
+
+.role-Blackmailer {
+    background-image: url('/images/roles/blackmailer.png');
+}
+
+.role-Stalker {
+    background-image: url('/images/roles/stalker.png');
+}
+
+.role-Janitor {
+    background-image: url('/images/roles/janitor.png');
+}
+
+.role-Driver {
+    background-image: url('/images/roles/driver.png');
+}
+
+.role-Lawyer {
+    background-image: url('/images/roles/lawyer.png');
+}
+
+/*
+.role-Saboteur {
+    background-position: -390px -40px;
+}
+*/
+
+.role-Disguiser {
+    background-image: url('/images/roles/disguiser.png');
+}
+
+/*
+.role-Ventriloquist {
+    background-position: -450px -40px;
+}
+*/
+
+/* Independent */
+
+.role-Jester {
+    background-image: url('/images/roles/Jester.png');
+}
+
+.role-Serial-Killer {
+    border: 3px solid #fff824;
+    background-image: url('/images/roles/serial_killer.png');
+}
+
+.role-Lover {
+    background-image: url('/images/roles/lover.png');
+}
+
+.role-Amnesiac {
+    background-image: url('/images/roles/amnesiac.png');
+}
+
+/*
+.role-Survivor {
+    background-position: -750px 0;
+}
+
+.role-Cultist {
+    background-position: -780px -40px;
+}
+*/
+
+/* Monsters */
+
+.role-Lycan {
+    background-image: url('/images/roles/lycan.png');
+}
+
+.role-Witch {
+    background-image: url('/images/roles/witch.png');
+}
+
+.role-Cthulhu {
+    background-image: url('/images/roles/cthulhu.png');
+}

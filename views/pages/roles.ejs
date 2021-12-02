@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <meta name="description" content="Play mafia with over 30 unique roles">
+        <link rel='stylesheet' href='/stylesheets/rolePage.css' />
+        <title>Roles | Cryptomafia</title>
+    </head>
+    <body>
+        <div class='site-wrapper'>
+            <div class='main-container'>
+                <%- include('../partials/navbar', {dId: dId, route: 'roles'}); %>
+                <%- include('../partials/alert', {
+                    show: {
+                        notif: inGame != null ? true : false
+                    }, msg: {
+                        notif: `Return to game <a href='/game/${inGame}'>${inGame}</a>, or <a href='#' class='leave'>leave</a>`
+                    }
+                }); %>
+
+                <div class='inner-container'>
+                    <h1>Roles</h1>
+                    <div class='search-nav'>
+                        <div class='btn-wrapper'>
+                            <div class='btn-group'>
+                                <button type='button' class='btn btn-white role-btn btn-sel' data-alignment='village'>Village</button>
+                                <button type='button' class='btn btn-white role-btn' data-alignment='mafia'>Mafia</button>
+                                <button type='button' class='btn btn-white role-btn' data-alignment='monsters'>Monsters</button>
+                                <button type='button' class='btn btn-white role-btn' data-alignment='independent'>Independent</button>
+                            </div>
+                        </div>
+                        <div class='search-wrapper'>
+                            <div class='input-group role-search'>
+                                <input type='text' class='form-control' placeholder='Search Roles' />
+                                <div class='input-group-append'>
+                                    <div class='input-group-text'>
+                                        <i class='fas fa-search'></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='role-list'>
+                    <% roles = roles.sort(function (a, b) {return a.name < b.name ? -1 : 1}) %>
+                    <% roles.forEach(function (role) { %>
+                        <div class='role-cell' data-alignment='<%= role.alignment %>' data-role='<%= role.name %>'>
+                            <% if (!role.disabled && dId) { %>
+                            <i class='add-role fas fa-plus-circle i-green'></i>
+                            <% } %>
+                            
+                        </div>
+                    <% }); %>
+                    </div>
+                    <% if (dId) { %>
+                    <h1 class='setup-h1'><%= setup.id ? 'Edit' : 'Create' %> Setup</h1>
+                    <div class='form-wrapper'>
+                        <form class='create-setup'>
+                            <input type='hidden' class='setup-edit' value='<%= setup.id || '' %>' />
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Setup Name</span>
+                                </div>
+                                <input type='text' class='form-control setup-name' value='<%= setup.name || '' %>' />
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Day Start</span>
+                                </div>
+                                <div class='check-wrap'>
+                                    <i class='check-icon fa-check-square <%= setup.startState == 'day' ? 'fas' : 'far' %>'></i>
+                                    <input type='checkbox' class='checkbox day-start' <%= setup.startState == 'day' ? 'checked' : '' %> />
+                                </div>
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Whispers</span>
+                                </div>
+                                <div class='check-wrap whispers-check'>
+                                    <i class='check-icon fa-check-square <%= setup.whispers ? 'fas' : 'far' %>'></i>
+                                    <input type='checkbox' class='checkbox whispers' <%= setup.whispers ? 'checked' : '' %> />
+                                </div>
+                            </div>
+                            <div class='form-group input-group setup-whispers hidden'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Whisper Leak Percentage</span>
+                                </div>
+                                <input type='number' class='whispers-leak form-control' min='0' max='100' value='<%= setup.leakPercentage || 5 %>' data-last-val='<%= setup.leakPercentage || 5 %>' />
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Last Wills</span>
+                                </div>
+                                <div class='check-wrap'>
+                                    <i class='check-icon fa-check-square <%= setup.lastWill ? 'fas' : 'far' %>'></i>
+                                    <input type='checkbox' class='checkbox last-will' <%= setup.lastWill ? 'checked' : '' %> />
+                                </div>
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Must Act</span>
+                                </div>
+                                <div class='check-wrap'>
+                                    <i class='check-icon fa-check-square <%= setup.mustAct ? 'fas' : 'far' %>'></i>
+                                    <input type='checkbox' class='checkbox must-act' <%= setup.mustAct ? 'checked' : '' %> />
+                                </div>
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>No Reveal</span>
+                                </div>
+                                <div class='check-wrap'>
+                                    <i class='check-icon fa-check-square <%= setup.noReveal ? 'fas' : 'far' %>'></i>
+                                    <input type='checkbox' class='checkbox no-reveal' <%= setup.noReveal ? 'checked' : '' %> />
+                                </div>
+                            </div>
+                            <div class='form-group input-group'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Closed Roles</span>
+                                </div>
+                                <div class='check-wrap closed-check'>
+                                    <i class='check-icon fa-check-square <%= setup.closed ? 'fas' : 'far' %>'></i>
+                                    <input type='checkbox' class='checkbox closed-roles' <%= setup.closed ? 'checked' : '' %> />
+                                </div>
+                            </div>
+                            <div class='form-group input-group setup-closed hidden'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Unique Roles</span>
+                                </div>
+                                <div class='check-wrap'>
+                                    <i class='check-icon fa-check-square <%= setup.unique ? 'fas' : 'far' %>'></i>
+                                    <input type='checkbox' class='checkbox unique-roles' <%= setup.unique ? 'checked' : '' %> />
+                                </div>
+                            </div>
+                            <div class='form-group input-group setup-closed hidden'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Village Count</span>
+                                </div>
+                                <input type='number' class='form-control village-count' min='0' max='50' value='<%= setup.count ? setup.count.get('village') : 7 %>' data-last-val='<%= setup.count ? setup.count.village : 7 %>' />
+                            </div>
+                            <div class='form-group input-group setup-closed hidden'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Mafia Count</span>
+                                </div>
+                                <input type='number' class='form-control mafia-count' min='0' max='50' value='<%= setup.count ? setup.count.get('mafia') : 3 %>' data-last-val='<%= setup.count ? setup.count.mafia : 3 %>' />
+                            </div>
+                            <div class='form-group input-group setup-closed hidden'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Monsters Count</span>
+                                </div>
+                                <input type='number' class='form-control monsters-count' min='0' max='50' value='<%= setup.count ? setup.count.get('independent') : 0 %>' data-last-val='<%= setup.count ? setup.count.independent : 0 %>' />
+                            </div>
+                            <div class='form-group input-group setup-closed hidden'>
+                                <div class='input-group-prepend'>
+                                    <span class='input-group-text'>Independent Count</span>
+                                </div>
+                                <input type='number' class='form-control independent-count' min='0' max='50' value='<%= setup.count ? setup.count.get('independent') : 2 %>' data-last-val='<%= setup.count ? setup.count.independent : 2 %>' />
+                            </div>
+                        </form>
+                        <div class='rolesets-wrapper'>
+                            <div class='roleset-list'>
+                                <div class='roleset roleset-sel' data-index='0'><div class='setup'></div></div>
+                            </div>
+                            <i class='add-roleset fas fa-plus-circle i-green setup-open'></i>
+                        </div>
+                    </div>
+                    <button type='button' class='create-setup-btn btn btn-success'><%= setup.id ? 'Edit' : 'Create' %></button>
+                    <% } %>
+                </div>
+
+                <% include ../partials/footer %>
+            </div>
+        </div>
+
+        <% include ../partials/scripts %>
+        <script>var roles = <%- setup.roles || '[]' %>;</script>
+        <script src='/javascript/createSetup.js'></script>
+    </body>
+</html>

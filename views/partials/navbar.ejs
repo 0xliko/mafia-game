@@ -1,0 +1,34 @@
+<script>
+    const isLoggedIn = "<%= dId%>"?true:false;
+</script>
+<header>
+    <div class='nav-wrapper-left'>
+        <nav>
+            <a class="nav-link-right <%= route == 'loggedouty' ? 'active' : '' %>" href="https://www.cryptomafia.gg">Cryptomafia.gg</a>
+        </nav>
+    </div>
+    <div class='nav-wrapper-right'>
+        <nav>
+            <a class="nav-link-right <%= route == 'loggedouty' ? 'active' : '' %>" href="/">Home</a>
+            <% if (dId) { %>
+                 <a class="nav-link-right wallet-connect" href="#">Wallet Connect</a>
+            <% } %>
+            <a class="nav-link-right <%= route == 'loggedout' ? 'active' : '' %>" href="<%= dId != null ? '/logout' : '/login' %>"><%= dId != null ? 'Logout' : 'Login' %></a>
+        </nav>
+    </div>
+    <div class='logo-wrapper'>
+        <a class='logo' href='/'></a>
+        <h1 class="cryptomafia-header"><label>Crypto</label><label>mafia</label></h1>
+    </div>
+    <h1 class="welcome-lobby">Welcome to the Open Beta</h1>
+    <br/>
+    <h5 class="welcome-header">NFT Integration Coming Soon!</h5>
+    <br/>
+    <div class="logo-wrapper">
+        <strong>
+        <p class="login-prompt" href="<%= dId != null ? '/logout' : '/login' %>"><%= dId != null ? '' : 'Click Login to Play' %></
+
+        </strong>
+    </div>
+
+</header>

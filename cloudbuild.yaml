@@ -1,0 +1,36 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/${_GCP_PROJECT}/${_SERVICE_NAME}:${_SERVICE_VERSION}', '.']
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/${_GCP_PROJECT}/${_SERVICE_NAME}:${_SERVICE_VERSION}']
+  
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'deploy'
+    - '${_SERVICE_NAME}'
+    - '--image'
+    - 'gcr.io/${_GCP_PROJECT}/${_SERVICE_NAME}:${_SERVICE_VERSION}'
+    - '--region'
+    - '${_GCP_REGION}'
+    - '--platform'
+    - 'managed'
+    - '--cpu'
+    - '2'
+    - '--concurrency'
+    - '200'
+    - '--memory'
+    - '2Gi'
+    - '--max-instances'
+    - '1'
+    - '--allow-unauthenticated'
+
+images:
+  - 'gcr.io/${_GCP_PROJECT}/${_SERVICE_NAME}:${_SERVICE_VERSION}'
+
+substitutions:
+  _GCP_PROJECT: 'cryptomafia'
+  _GCP_REGION: 'us-east1'
+  _SERVICE_NAME: 'client-game-dev'
+  _SERVICE_VERSION: '1.0.0'

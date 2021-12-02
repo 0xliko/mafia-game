@@ -1,0 +1,63 @@
+.panel {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.discord-login {
+    background-color: #7289da;
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.separator-text {
+    margin-bottom: 10px;
+}
+
+iframe {
+    width: 350px;
+    height: 500px;
+}
+
+.accept-tos {
+    max-width: 340px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.accept-tos a {
+    color: #7289da !important;
+}
+
+@media (max-width: 900px) {
+    iframe {
+        width: 350px;
+        height: 300px;
+        pointer-events: none;
+    }
+}
+.welcome-lobby{
+    display: none;
+}
+.login-banner-container{
+    margin: 0 20px 50px 20px;
+}
+.login-banner-container img{
+    width: 100%;
+}
+.inner-container{
+    margin-top: -10px;
+}
+.dsl-discord-btn-icon {
+    background-image: url("../images/discord_icon.svg") !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% !important;
+    display: inline-block !important;
+    height: 20px !important;
+    width: 20px !important;
+    vertical-align: middle !important;
+    margin: -1px 10px 0 0 !important;
+}

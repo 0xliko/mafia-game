@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <meta name="description" content="Reinventing Mafia on the Solana Blockchain">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js" integrity="sha384-+B5mxfxGyVu/FrOhey2i5JoT2jpyVo9xpkRdp0p3CEtkHZywWj2iew6swTTszfyd" crossorigin="anonymous"></script>
+        <script src="https://cdn.rawgit.com/marcandre/detect_swipe/master/jquery.detect_swipe.js" integrity="sha384-+x00xJ7SnYLNsIy9jLXc+I0KUpdQTrDPHH1FfGh0F/gEKmHfhminTMCDFRqdosE6" crossorigin="anonymous"></script>
+        <link rel='stylesheet' href='/stylesheets/game.css' />
+        <title>Game <%= gameId %> | Cryptomafia</title>
+    </head>
+    <body>
+        <div class='loading-cover'>
+            <!-- <div class='loading-wheel-large'></div> -->
+        </div>
+        <div class='game-container'>
+            <div class="title-bar">
+               <i class="red"></i>
+               <i class="yellow"></i>
+               <i class="green"></i>
+               <label>Cryptomafia powered by Sieve Labs</label>
+            </div>
+            <div class='top'>
+                <div class='logo-wrapper'>
+                    <div class='logo'></div>
+                </div>
+                <div class='game-info'>
+                    <i class='edit-settings fas fa-cog' data-toggle='modal' data-target='#settingsModal' title='Settings'></i>
+                    <i class='edit-will fas fa-edit' data-toggle='modal' data-target='#willModal' title='Edit Will'></i>
+                    <div class='setup-wrapper'></div>
+
+                </div>
+                <div class='state-wrapper'>
+                    <div class='state-desc'>
+                        <i class='hist-arrow hist-left fas fa-caret-left' data-dir='-1'></i>
+                        <span class='state'>Lobby</span>
+                        <span class='day'></span>
+                        <i class='hist-arrow hist-right fas fa-caret-right' data-dir='1'></i>
+                    </div>
+                    <div class="digital-clock"></div>
+                    <!--<canvas class='clock' width='100' height='100' data-toggle='tooltip' title=''></canvas>-->
+                </div>
+                <button class='leave btn btn-simple raydium-theme-button active'>Leave</button>
+            </div>
+            <div class='main'>
+                <div class='left-panel panel'>
+                    <div class="flex">
+                    <div class='action-list'></div>
+                    <div class='console-list'></div>
+
+                    </div>
+                </div>
+                <div class='center-panel panel'>
+                    <div class='tabs'></div>
+                    <div class='speech-display'></div>
+                    <div class='speech-input-area'>
+                        <div class='speech-input-wrapper'>
+                            <div class='speech-drop dropdown' data-type='chat'>
+                                <div class='speech-label dropdown-toggle' data-toggle='dropdown'>
+                                    <i class="fa fa-comment-dots"></i>
+                                </div>
+                                <div class='dropdown-menu'>
+                                    <div class='dropdown-item' data-type='chat' data-display='Chat'>
+                                        Chat
+                                    </div>
+                                </div>
+                            </div>
+                            <input type='text' class='speech-input' />
+                        </div>
+                    </div>
+                </div>
+                <div class='right-panel panel'>
+                    <div class='player-list'></div>
+                </div>
+            </div>
+        </div>
+
+        <div class='modal fade' id='willModal' tabindex='-1'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        Draft Will
+                    </div>
+                    <div class='modal-body'>
+                        <textarea class='will-content'></textarea>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='btn btn-simple raydium-theme-button' data-dismiss='modal'>Dismiss</button>
+                        <button type='button' class='save-will btn btn-primary raydium-theme-button active' data-dismiss='modal'>Publish</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='modal fade' id='deadAlertModal' tabindex='-1'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        Dead Alert
+                    </div>
+                    <div class='modal-body'>
+                        <label class="dead-message"></label>
+                        <img src="/images/dead.gif"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='modal fade' id='settingsModal' tabindex='-1'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        Settings
+                    </div>
+                    <div class='modal-body'>
+                        <div class='setting check-wrap'>
+                            <i class='check-icon far fa-check-square'></i>
+                            <input type='checkbox' class='checkbox' id='votingLog' />
+                            <label class='form-check-label'>Voting Log</label>
+                        </div>
+                        <div class='setting check-wrap'>
+                            <i class='check-icon far fa-check-square'></i>
+                            <input type='checkbox' class='checkbox' id='clockTick' />
+                            <label class='form-check-label'>Clock Tick</label>
+                        </div>
+                        <div class='setting check-wrap'>
+                            <i class='check-icon far fa-check-square'></i>
+                            <input type='checkbox' class='checkbox' id='bellSound' />
+                            <label class='form-check-label'>Bell Sound</label>
+                        </div>
+                        <div class='setting check-wrap'>
+                            <i class='check-icon far fa-check-square'></i>
+                            <input type='checkbox' class='checkbox' id='ambientSound' />
+                            <label class='form-check-label'>Ambient Sound</label>
+                        </div>
+                        <div class='setting check-wrap'>
+                            <i class='check-icon far fa-check-square'></i>
+                            <input type='checkbox' class='checkbox' id='winSound' />
+                            <label class='form-check-label'>Win Sound</label>
+                        </div>
+                        <div class='setting check-wrap'>
+                            <i class='check-icon far fa-check-square'></i>
+                            <input type='checkbox' class='checkbox' id='largeText' />
+                            <label class='form-check-label'>Large Text</label>
+                        </div>
+                        <div class='setting slider-wrap'>
+                        <label class='form-check-label'>Volume</label>
+                            <input type='range' min='0' max='1' value='1' step='0.1' class='number-slider' id='volume' />
+                        </div>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='cancel-settings btn btn-simple' data-dismiss='modal'>Cancel</button>
+                        <button type='button' class='save-settings btn btn-primary' data-dismiss='modal'>Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <audio id="bg-audio" src="/audio/bg.wav" autoplay loop volume="0.05"></audio>
+        <% include ../partials/scripts %>
+        <script src='/javascript/emojis.js'></script>
+        <script src='/javascript/gameClient.js'></script>
+        <script src='/javascript/clock.js'></script>
+        <script>
+            var game = new Game('<%= gameId %>', '<%= socketUrl %>', <%= isTest %>);
+            $(`[data-toggle='tooltip']`).tooltip();
+            if ('ontouchstart' in window) {
+                $('html').css('height', window.innerHeight);
+                $('body').css('height', window.innerHeight);
+            }
+        </script>
+    </body>
+</html>

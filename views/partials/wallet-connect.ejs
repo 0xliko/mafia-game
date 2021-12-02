@@ -1,0 +1,28 @@
+<% var wallet_url = process.env.NODE_ENV=='development'?'http://127.0.0.1:3001/wallet-connect':'/wallet-connect' %>
+<div class='modal fade' id='walletModal' tabindex='-1'>
+        <div class='modal-dialog'>
+
+                <div class='modal-content'>
+                        <div class='modal-body'>
+                                <iframe src="<%= wallet_url %>" data-mode="<%= process.env.NODE_ENV || 'production' %>"></iframe>
+                        </div>
+
+                </div>
+        </div>
+</div>
+<div class='modal fade' id='pickNFTModal' tabindex='-1'>
+        <div class='modal-dialog'>
+                <div class='modal-content'>
+                        <div class='modal-header'>
+                              Please choose one nft image for your profile.
+                        </div>
+                        <div class='modal-body'>
+                           NFT images will be here.
+                        </div>
+                        <div class='modal-footer'>
+                                <button type='button' class='cancel-settings btn btn-simple raydium-theme-button active' data-dismiss='modal'>Close</button>
+                        </div>
+                </div>
+        </div>
+</div>
+

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <meta name="description" content="Play mafia online in real time with just your Discord account">
+        <link rel='stylesheet' href='/stylesheets/login.css' />
+        <title>Cryptomafia</title>
+    </head>
+    <body>
+        <div class='site-wrapper'>
+            <div class='main-container'>
+                <%- include('../partials/navbar', {dId: null, route: 'loggedout'}); %>
+                <%- include('../partials/alert', {show: {}, msg: {}}); %>
+
+                <div class='inner-container'>
+                    <div class='panel'>
+                        <br/>
+                        <br/>
+                        <div>
+                            <a class='btn lead discord-login' href='/auth'>
+                                <span class="dsl-discord-btn-icon"></span>
+                                <span class="dsl-discord-btn-text">Login with Discord</span>
+                            </a>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="login-banner-container">
+                            <img src="/images/login-banner.png"/>
+                        </div>
+                        <!--<div class='separator-text'>
+                            and join the server
+                        </div>-->
+                        <!--<div>
+                            <iframe src="https://discordapp.com/widget?id=458148658987401229&theme=dark" allowtransparency="true" frameborder="0"></iframe>
+                        </div>-->
+                        <!--<div class='accept-tos'>By logging in with Discord, you accept our <a href='https://discordapp.com/channels/458148658987401229/462326103395139603'>Terms of Service</a> and agree to follow our <a href='https://discordapp.com/channels/458148658987401229/458153196922077187'>rules.</a></div>-->
+                    </div>
+                </div>
+
+                <% include ../partials/footer %>
+            </div>
+        </div>
+        <% include ../partials/scripts %>
+        <script>if (location.search.indexOf('?redirect=') == 0) localStorage.cryptomafiaRedirect = location.search.replace('?redirect=', '')</script>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+.inner-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+h1 {
+    font-size: 40px;
+}

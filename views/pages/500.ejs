@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <meta name="description" content="Page not found">
+        <link rel='stylesheet' href='/stylesheets/404.css' />
+        <title>Error | Cryptomafia</title>
+    </head>
+    <body>
+        <div class='site-wrapper'>
+            <div class='main-container'>
+                <%- include('../partials/navbar', {dId: dId, route: '500'}); %>
+                <%- include('../partials/alert', {show: {error: error}, msg: {error: error}}); %>
+
+                <div class='inner-container'>
+                    <h1>Oops, something went wrong...</h1>
+                </div>
+                <% include ../partials/footer %>
+            </div>
+        </div>
+
+        <% include ../partials/scripts %>
+    </body>
+</html>

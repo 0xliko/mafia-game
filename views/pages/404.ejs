@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <meta name="description" content="Page not found">
+        <link rel='stylesheet' href='/stylesheets/404.css' />
+        <title>Not Found | Cryptomafia</title>
+    </head>
+    <body>
+        <div class='site-wrapper'>
+            <div class='main-container'>
+                <%- include('../partials/navbar', {dId: dId, route: '404'}); %>
+
+                <div class='inner-container'>
+                    <h1>🥺 We're sorry. We can't find what you're looking for</h1>
+                </div>
+                <% include ../partials/footer %>
+            </div>
+        </div>
+
+        <% include ../partials/scripts %>
+    </body>
+</html>

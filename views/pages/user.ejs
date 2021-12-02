@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <meta name="description" content="Reinventing Mafia on the Solana Blockchain">
+        <link rel='stylesheet' href='/stylesheets/user.css' />
+        <title><%= user.name %> | Cryptomafia</title>
+    </head>
+    <body>
+        <div class='site-wrapper'>
+            <div class='main-container'>
+                <%- include('../partials/navbar', {dId: dId, route: 'play'}); %>
+                <%- include('../partials/alert', {
+                    show: {
+                        notif: inGame != null ? true : false
+                    }, msg: {
+                        notif: `Return to game <a href='/game/${inGame}'>${inGame}</a>, or <a href='#' class='leave'>leave</a>`
+                    }
+                }); %>
+
+                <div id='profile_app' class='inner-container'></div>
+
+                <% include ../partials/footer %>
+            </div>
+        </div>
+
+        <% include ../partials/scripts %>
+        <% include ../partials/react %>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.min.js'></script>
+        <script src='/javascript/profile.js'></script>
+    </body>
+</html>

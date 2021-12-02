@@ -1,0 +1,302 @@
+.top-bar {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.game-list {
+  margin: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.game-row {
+  display: flex;
+  flex-flow: row nowrap;
+  margin-top: 10px;
+}
+
+.game-row button {
+  margin-right: 10px;
+}
+
+.game-row .btn-rehost {
+  margin-left: 10px;
+  margin-right: 0px;
+}
+
+.player-count {
+  align-self: center;
+  margin-left: 10px;
+}
+
+.game-info {
+  align-self: center;
+  margin-left: 10px;
+}
+
+.refresh-games {
+  margin-left: 725px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.refresh-games:hover {
+  color: #d9d9d9;
+}
+
+.refresh-games:active {
+  color: #a09e9e;
+}
+.card {
+  padding: 2px;
+  background: linear-gradient(
+    245.22deg,
+    #28ec9c 7.97%,
+    #a874f4 49.17%,
+    #88accc 92.1%
+  );
+  border-radius: 5px;
+  color: #dfdfe8;
+  opacity: 0.97;
+}
+.card-body {
+  padding: 0;
+  margin: 0;
+}
+
+.card .card-body {
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  display: grid;
+  grid-auto-rows: auto;
+  grid-row-gap: 12px;
+  row-gap: 0px;
+  padding: 0px;
+  background-color: #131a35;
+  opacity: 0.8;
+  border-radius: 4px;
+}
+.card .card-body .title-part {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  grid-row-gap: 8px;
+  row-gap: 8px;
+  align-items: center;
+  padding: 8px 24px;
+}
+.card .card-body .title-part .title-text {
+  /*margin-right: auto;*/
+}
+.toggle {
+  margin-right: 14px;
+}
+.toggle label {
+  margin-left: 10px;
+}
+/*switch effect start*/
+
+@keyframes waveEffect {
+  to {
+    box-shadow: 0 0 0 #5ac4be;
+    box-shadow: 0 0 0 6px #5ac4be;
+    box-shadow: 0 0 0 6px #5ac4be;
+  }
+}
+@keyframes fadeEffect {
+  to {
+    opacity: 0;
+  }
+}
+
+.ant-switch {
+  margin: 0;
+  padding: 0;
+  color: #f1f1f2;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5;
+  list-style: none;
+  font-feature-settings: "tnum", "tnum";
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  min-width: 44px;
+  height: 22px;
+  line-height: 20px;
+  vertical-align: middle;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid transparent;
+  border-top-color: transparent;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-right-color: transparent;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-bottom-color: transparent;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-left-color: transparent;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.36s;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.ant-switch:after {
+  box-shadow: 0 2px 4px 0 rgba(0 35 11 0.2);
+}
+.ant-switch-checked {
+  background-color: #5ac4be;
+}
+.ant-switch-inner {
+  display: block;
+  margin-right: 6px;
+  margin-left: 24px;
+  color: #fff;
+  font-size: 12px;
+}
+.ant-switch-checked .ant-switch-inner {
+  margin-right: 24px;
+  margin-left: 6px;
+}
+.ant-click-animating-node {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 #5ac4be;
+  opacity: 0.2;
+  -webkit-animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1),
+    waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
+  animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1),
+    waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  content: "";
+  pointer-events: none;
+}
+.ant-switch:focus {
+  outline: none;
+}
+.ant-switch:after {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.36s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+  content: " ";
+}
+.ant-switch-checked:after {
+  left: 100%;
+  margin-left: -1px;
+  transform: translateX(-100%);
+}
+
+.game-list {
+  margin-top: 10px;
+}
+
+.game-item-row {
+  padding: 10px;
+  background: #000829;
+  border-bottom: 1px solid #d9d9d9;
+  display: flex;
+}
+.game-item-row.no-yet {
+  justify-content: center;
+}
+.player-count label,
+.ranked-status label,
+.staked-status label {
+  margin-bottom: 0px;
+}
+.people-info {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+.player-count {
+  flex: 1;
+  text-align: center;
+}
+.ranked-status,
+.staked-status {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.staked-status label,
+.ranked-status label {
+  flex: 1;
+  display: block;
+}
+.staked-status input,
+.ranked-status input {
+  flex: 1;
+  display: block;
+}
+.btn-container {
+  flex: 1;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-container .btn-location,
+.btn-rehost {
+  background: transparent;
+  border-color: #5ac4be !important;
+}
+.btn-container .btn-progress {
+  background: transparent;
+  border-color: #5ac4be !important;
+  color: #12ba36;
+}
+
+.btn-container .btn-location:active,
+.btn-rehost:active {
+  color: #419e9d !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  border-color: #419e9d;
+  box-shadow: none !important;
+}
+.btn-container .btn-location:hover,
+.btn-rehost:hover {
+  color: #82d1ca;
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+.btn-location.review {
+  color: #e03434;
+  border-color: #e70c37 !important;
+}
+.btn-location.review:hover {
+  color: #5c1313 !important;
+}
+@media (max-width: 900px) {
+  .title-part {
+    opacity: 1;
+    flex-direction: column;
+  }
+}

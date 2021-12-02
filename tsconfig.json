@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+    "outDir": "./build/wallet-connect",
+    "module": "esnext",
+    "target": "es6",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "baseUrl": "./wallet-connect",
+    "rootDir": "./wallet-connect",
+    "typeRoots": ["./node_modules/@types", "./wallet-connect/@types"],
+    "paths": {
+      "@src/*": ["src/*"],
+      "@images/*": ["src/images/*"],
+      "@styles/*": ["src/styles/*"],
+      "@components/*": ["src/components/*"]
+    },
+    "plugins": [
+            {
+                "name": "typescript-plugin-css-modules"
+            }
+    ],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "preserve",
+    "incremental": true
+    },
+    "include": ["wallet-connect"],
+    "exclude": ["**/node_modules", "**/.*/"]
+}

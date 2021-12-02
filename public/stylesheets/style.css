@@ -1,0 +1,617 @@
+/*
+ * Globals
+ */
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.site-wrapper {
+    display: table;
+    width: 100%;
+    height: 100%; /* For at least Firefox */
+    min-height: 100%;
+}
+.site-wrapper-inner {
+    display: table-cell;
+    vertical-align: top;
+}
+.cover-container {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Padding for spacing */
+.inner {
+    padding: 2rem;
+}
+main {
+    padding: 0px !important;
+}
+
+
+/*
+ * Header
+ */
+.masthead {
+    margin-bottom: 2rem;
+}
+
+.masthead-brand {
+    margin-bottom: 0;
+}
+
+.nav-masthead .nav-link {
+    padding: .25rem 0;
+    font-weight: 700;
+    color: rgba(255, 255, 255, .5);
+    background-color: transparent;
+    border-bottom: .25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+    border-bottom-color: rgba(255, 255, 255, .25);
+}
+
+.nav-masthead .nav-link + .nav-link {
+    margin-left: 1rem;
+}
+
+.nav-masthead .active {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+@media (min-width: 48em) {
+    .masthead-brand {
+        float: left;
+    }
+    .nav-masthead {
+        float: right;
+    }
+}
+
+@media (max-width: 48em) {
+    .nav-link {
+        margin: auto;
+    }
+}
+
+/*
+ * Cover
+ */
+.cover {
+    padding: 0 1.5rem;
+}
+.cover .btn-lg {
+    padding: .75rem 1.25rem;
+    font-weight: 700;
+}
+.cover-heading {
+    text-align: left;
+}
+
+
+/*
+ * Footer
+ */
+.mastfoot {
+    color: rgba(255, 255, 255, .5);
+}
+
+
+/*
+ * Affix and center
+ */
+@media (min-width: 40em) {
+    /* Pull out the header and footer */
+    /*.masthead {
+        position: fixed;
+        top: 0;
+    }
+    .mastfoot {
+        position: fixed;
+        bottom: 0;
+    }*/
+
+    /* Start the vertical centering */
+    .site-wrapper-inner {
+        /*vertical-align: middle;*/
+    }
+
+    /* Handle the widths */
+    .masthead,
+    .mastfoot,
+    .cover-container {
+        width: 100%; /* Must be percentage or pixels for horizontal alignment */
+    }
+}
+
+@media (min-width: 62em) {
+    .masthead,
+    .mastfoot,
+    .cover-container {
+        width: 60rem;
+    }
+}
+
+/*
+ * Popover
+ */
+.popover {
+    color: black;
+}
+
+.popover span, .popover div {
+    cursor: default !important;
+}
+
+/*
+ * Theme
+ */
+.logo {
+    display: inline-block;
+    width: 200px;
+    height: 100px;
+    background-size: 100%;
+    background-image: url('/images/logo-light.png');
+}
+
+ a.discordLogin {
+     background-color: #7289da;
+     font-size: 1.25rem;
+     font-weight: 300;
+     margin-bottom: 10px;
+ }
+
+.d1 {
+    background-color: #1B1B1B;
+}
+
+.d2 {
+    background-color: #1F1F1F;
+}
+
+.d3 {
+    background-color: #333;
+}
+
+.d4 {
+    background-color: #474747;
+}
+
+.d5 {
+    background-color: #5B5B5B;
+}
+
+.pagination {
+    color: black;
+}
+
+.page-sel {
+    background-color: #dddddd;
+}
+
+.flex-center {
+    align-self: center;
+    align-items: center;
+}
+
+.notif a {
+    color: #7c0000;
+}
+
+/*
+ * Setups
+ */
+
+.roleList {
+    max-width: 300px;
+}
+
+/*
+ * Game
+ */
+.right-top-panel {
+    justify-content: space-evenly;
+}
+
+.game-wrapper {
+    height: 95%;
+}
+
+.top-bar {
+    padding: 10px;
+}
+
+.rounded {
+    border-radius: 3px;
+}
+
+.clock {
+    background-color: transparent;
+}
+
+.historyDropdown {
+    cursor: pointer;
+}
+
+.main-content {
+    height: 80%;
+}
+
+.action, .player {
+    width: 100%;
+    margin-top: 5px;
+    padding: 5px 0px 5px 0px;
+    border-radius: 5px;
+}
+
+.action .dropdown-toggle {
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.vote {
+    font-size: .8rem;
+    color: #9b9b9b;
+}
+
+.vote-sel {
+    background-color: #999;
+}
+
+.vote-sel:hover {
+    background-color: #999;
+}
+
+.tab {
+    max-width: 200px;
+    background-color: #151515;
+    border-right: 1px solid #333;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 300;
+    padding: 3px;
+    border-radius: 3px 3px 0px 0px;
+}
+
+.tab-sel {
+    background-color: #1F1F1F;
+    color: white;
+}
+
+.input-row {
+    padding: 0px 10px 20px 10px;
+    border-radius: 0px 0px 3px 3px;
+}
+
+.speech-wrapper {
+    padding: 0px;
+    font-size: 1.25rem;
+    /*font-weight: 300;*/
+    margin: 5px;
+}
+
+.speech-type {
+    background-color: #444;
+    border-color: #333;
+    color: white;
+}
+
+.speech-drop-btn {
+    background-color: #444;
+    border-color: #333;
+    color: white;
+}
+
+.input-drop {
+    display: inline-block;
+    color: white;
+    font-size: 1rem;
+    top: -3px;
+}
+
+.input-drop-toggle {
+    color: white;
+    background: none;
+}
+
+.speech-input {
+    background-color: #444;
+    border-color: #333;
+    color: white;
+}
+
+.speech-input:focus {
+    background-color: #555;
+    border-color: #444;
+    color: white;
+}
+
+.divider {
+    margin-top: 10px;
+}
+
+.players {
+    padding-top: 10px;
+}
+
+.playerInfo {
+    align-items: center;
+}
+
+.player span {
+    display: inline-block;
+}
+
+.avatar {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    background-size: 100%;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.avatar-small {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.username {
+    display: inline;
+    margin-left: 5px;
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.username-small {
+    display: inline;
+}
+
+.game-wrapper .username {
+    white-space: nowrap;
+    max-width: 5.5rem;
+    overflow: hidden;
+}
+
+.msg-info .username {
+    color: #ddd;
+}
+
+.poptag {
+    hidden: 'true';
+    display: none;
+    cursor: pointer;
+}
+
+.poptag:hover {
+    text-decoration: none;
+}
+
+.messages-wrapper {
+    height: 100%;
+    padding-top: 10px;
+    border-radius: 0px 3px 0px 0px;
+}
+
+.messages {
+    height: 99%;
+    overflow-y: scroll;
+}
+
+.msg {
+    font-size: 1rem;
+    font-weight: 300;
+    overflow-x: hidden;
+    padding: 3px;
+}
+
+.time {
+    margin-right: 5px;
+}
+
+.msg-info {
+    min-width: 188px;
+    align-items: center;
+    padding: 0px;
+}
+
+.msg-content {
+    align-self: center;
+    padding: 0rem 0.5rem 0rem 0rem;
+}
+
+.whisper {
+    font-style: italic;
+}
+
+.server {
+    color: #ffb8b8;
+}
+
+ /*
+  * Setup creation
+  */
+.roles-wrapper {
+    margin-bottom: 2rem;
+}
+
+.role-cell {
+    background-color: white;
+    color: black;
+    margin: 5px;
+    padding: 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.role-cell span {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.role-cell .role-name {
+    width: 93px;
+    text-align: left;
+}
+
+.btn-white {
+    background-color: white;
+}
+
+.btn-sel {
+    background-color: #dddddd;
+}
+
+.create-setup {
+    padding-left: 5px;
+}
+
+.rolesets-wrapper {
+    padding: 0px 8px 0px 5px;
+}
+
+.roleset {
+    color: black;
+    background-color: white;
+    position: relative;
+    padding: 8px 25px 0px 25px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    min-height: 55px;
+    cursor: pointer;
+}
+
+.roleset-sel {
+    background-color: #dddddd;
+}
+
+.add-roleset {
+    cursor: pointer;
+}
+
+.delete-roleset {
+    cursor: pointer;
+    position: absolute;
+    top: 18px;
+    right: 11px;
+}
+
+/*
+ * Game creation
+ */
+.create-game {
+    padding-left: 5px;
+}
+
+.setup-cell .select-setup, .setup-cell .setup {
+    vertical-align: middle;
+}
+
+.setup-cell {
+    margin: 5px;
+}
+
+.select-setup, .fav-setup {
+    cursor: pointer;
+}
+
+.setup-list .loading-wheel-white {
+    margin: 10px;
+}
+
+/*
+ * Game joining
+ */
+.game-list {
+    min-height: 10px;
+}
+
+.player-count {
+    margin-right: 10px;
+}
+
+.game-info {
+    cursor: pointer;
+}
+
+.game-list .loading-wheel-white {
+    margin: 10px;
+}
+
+/*
+ * Game Review
+ */
+.win-icon {
+    margin-left: 10px;
+}
+
+/*
+ * Modal
+ */
+
+#recordModal {
+    color: black;
+}
+
+.hist-server {
+    color: #e10000;
+}
+
+/*
+ * Scrollbar
+ */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #333;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1B1B1B;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #474747;
+}
+
+/*
+ * Roles
+ */
+
+ .role {
+     width: 30px;
+     height: 40px;
+     display: inline-block;
+     /*margin-right: 5px;*/
+     background-color: white;
+     border-radius: 3px;
+     background-image: url('/images/roles.png');
+ }
+
+ .roleS {
+     width: 20px;
+     height: 20px;
+     display: inline-block;
+     margin-right: 5px;
+     background-color: white;
+     border-radius: 3px;
+     background-image: url('/images/roleSmall.png');
+ }

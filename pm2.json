@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "RL.Tracker-Backend",
+      "script": "npm",
+      "args": "start"
+    }
+  ]
+}

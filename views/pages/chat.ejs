@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partials/head %>
+        <link rel='stylesheet' href='/stylesheets/chat.css' />
+        <title>Chat | Cryptomafia</title>
+    </head>
+    <body>
+        <div class='site-wrapper'>
+            <div class='main-container'>
+                <%- include('../partials/navbar', {route: 'chat'}); %>
+                <%- include('../partials/alert', {
+                    show: {
+                        notif: inGame != null ? true : false
+                    }, msg: {
+                        notif: `Return to game <a href='/game/${inGame}'>${inGame}</a>, or <a  class='leave'>leave</a>`
+                    }
+                }); %>
+
+                <div class='inner-container'>
+                    <h1><a href='https://discord.gg/nRhg39Z'>https://discord.gg/nRhg39Z</a></h1>
+                    <iframe src="https://titanembeds.com/embed/458148658987401229?defaultchannel=458148659465420822&theme=DiscordDark" height="600" width="800" frameborder="0"></iframe>
+                </div>
+                <% include ../partials/footer %>
+            </div>
+        </div>
+
+        <% include ../partials/scripts %>
+    </body>
+</html>

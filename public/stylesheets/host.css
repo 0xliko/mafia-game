@@ -1,0 +1,24 @@
+.setup-list {
+    display: flex;
+    flex-flow: column;
+}
+
+.setup-cell {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.setup-cell .setup {
+    margin-right: 10px;
+}
+
+.setup-cell i {
+    cursor: pointer;
+}
+
+.select-setup, .fav-setup, .edit-setup, .delete-setup {
+    margin-right: 10px;
+    font-size: 20px;
+}

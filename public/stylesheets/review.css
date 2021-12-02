@@ -1,0 +1,68 @@
+.game-info {
+    display: flex;
+    flex-flow: row wrap;
+    margin-bottom: 20px;
+}
+
+.panel {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column;
+}
+
+.player-list {
+    display: flex;
+    flex-flow: column;
+}
+
+.player {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.player-info {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.details {
+    display: flex;
+    flex-flow: column;
+}
+
+.detail {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.detail-title {
+    font-weight: 700;
+}
+
+.detail-info {
+    margin-left: 10px;
+}
+
+.setup-wrap {
+    display: flex;
+}
+
+.fa-check-circle {
+    margin-left: 5px;
+}
+.inner-container .flex{
+    display: inline-flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.inner-container .flex h1{
+    margin-bottom: 0px;
+}
+.inner-container .flex a{
+  color: white;
+}

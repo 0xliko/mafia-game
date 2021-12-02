@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../partials/head %>
+    <meta name="description" content="Reinventing Mafia on the Solana Blockchain">
+    <link rel='stylesheet' href='/stylesheets/join.css'/>
+    <title>Cryptomafia</title>
+</head>
+<body>
+<div class='site-wrapper'>
+    <div class='main-container'>
+        <%- include('../partials/navbar', {dId: dId, route: 'play'}); %>
+        <%- include('../partials/alert', {
+        show: {
+        error: banned,
+        notif: inGame != null ? true : false
+        }, msg: {
+        error: 'You are currently banned from playing games',
+        notif: `You are currently in a game <a href='/game/${inGame}' class='return raydium-theme-button'>Return</a>  <a href='#' class='leave raydium-theme-button'>Leave</a>`
+        }
+        }); %>
+
+        <div class='inner-container'>
+            <h1 class="join_title">Join Game</h1>
+            <div class='top-bar btn-wrapper'>
+                <div class='btn-group'>
+                    <button type='button' class='btn btn-white game-list-btn raydium-theme-button' data-type='normal'>
+                        Normals
+                    </button>
+                    <button type='button' class='btn btn-white game-list-btn raydium-theme-button'
+                            data-type='inProgress' disabled>Ranked
+                    </button>
+                    <!-- <button type='button' class='btn btn-white game-list-btn raydium-theme-button' data-type='finished' disabled>
+                        Staked
+                    </button> -->
+                </div>
+                <!-- <i class='refresh-games fas fa-sync'></i> -->
+            </div>
+            <div class='game-list'>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-part">
+                            <div class="title-text"><h2 class="main-title">All Games</h2>
+                                <div class="main-description">Play mafia</div>
+                            </div>
+                            <div class="toggle">
+
+                                <button type="button" role="switch" class="ant-switch" ant-click-animating="true" disabled>
+                                    <span class="ant-switch-inner"></span>
+                                    <div class="ant-click-animating-node"></div>
+                                </button>
+                                <label class="label">Staked</label>
+                            </div>
+
+                            <div class='btn-group'>
+                                <button type='button' class='btn game-status-toggle raydium-theme-button active' data-status='active'>
+                                    Active
+                                </button>
+                                <button type='button' class='btn game-status-toggle raydium-theme-button'
+                                        data-status='ended'>Ended
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="game-item-list">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='pagination-wrapper'></div>
+        </div>
+
+        <% include ../partials/footer %>
+    </div>
+</div>
+
+<% include ../partials/wallet-connect %>
+<% include ../partials/scripts %>
+<script>var loggedIn = <%- dId != null %></script>
+<script src='/javascript/joinGame.js'></script>
+</body>
+</html>
