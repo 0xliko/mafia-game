@@ -5,7 +5,7 @@ var routeUtils = require('./routeUtils');
 var router = express.Router();
 
 router.get('/', async function(req, res, next) {
-    console.log(req.user)
+
     try {
         let banned, inGame, dId = req.user ? req.user.dId : null;
         if (dId) {

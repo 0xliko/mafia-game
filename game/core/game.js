@@ -287,8 +287,8 @@ module.exports = class Game {
                 player.user.socket.disconnect();
             }
         }
-
-        if (this.players.length < 1)
+        // changed by lyu jin although there are no players, if game not started yet, will not remove game
+        if (this.started && this.players.length < 1)
             this.closeGame();
     }
 

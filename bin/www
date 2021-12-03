@@ -57,7 +57,7 @@ db.once('open', function () {
     /**
     * Start chron jobs
     */
-    chronJobs();
+    // chronJobs();
 });
 
 /**

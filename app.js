@@ -7,14 +7,12 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var passport = require('passport');
 var fs = require('fs');
-
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var gameRouter = require('./routes/game');
-var setupRouter = require('./routes/setup');
 var roleRouter = require('./routes/roles');
 var userRouter = require('./routes/user');
-var emojiRouter = require('./routes/emojis');
+
 
 var session = require('./session');
 
@@ -33,16 +31,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session);
 if(process.env.NODE_ENV=="development") {
     app.use(express.static(path.join(__dirname, 'public'), {maxAge: 3600}));
-} else{
+}
+else{
     app.use("/javascript", express.static(path.join(__dirname, 'build', 'javascript'),{maxAge: 3600}));
     app.use("/wallet-connect", express.static(path.join(__dirname, 'build', 'wallet-connect'),{maxAge: 3600}));
     app.use("/images", express.static(path.join(__dirname, 'public', 'images'),{maxAge: 3600}));
     app.use("/audio", express.static(path.join(__dirname, 'public', 'audio'),{maxAge: 3600}));
     app.use("/stylesheets", express.static(path.join(__dirname, 'public', 'stylesheets'),{maxAge: 3600}));
     app.use("/fonts", express.static(path.join(__dirname, 'public', 'fonts'),{maxAge: 3600}));
-
 }
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -50,16 +47,12 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/game', gameRouter);
-//app.use('/setup', setupRouter);
 app.use('/roles', roleRouter);
 app.use('/user', userRouter);
-//app.use('/emojis', emojiRouter);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development

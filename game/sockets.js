@@ -10,6 +10,7 @@ module.exports = async function (io) {
     try {
         io.use(ioSession(sessionMiddleware));
         io.on('connection', async function (socket) {
+            // if user logged in
             if (socket.handshake.session.passport && socket.handshake.session.passport.user) {
                 const session = socket.handshake.session.passport.user;
 
