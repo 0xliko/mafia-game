@@ -100,7 +100,9 @@ function listeners (user, game) {
         if (meeting)
             meeting.vote(user.player, selection);
     });
-
+    socket.on('kick_agree', function () {
+        game.kickAgree(user);
+    });
     socket.on('unvote', function (meetingId) {
         let meeting = game.getMeeting(meetingId);
         if (meeting)

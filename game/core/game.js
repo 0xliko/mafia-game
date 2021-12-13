@@ -31,6 +31,8 @@ module.exports = class Game {
         this.stateMods = {};
         this.players = [];
         this.meetings = [];
+        this.kickPhase = false;
+        this.kickPhaseCountDownStarted = false;
         this.actionQueue = {
             0: []
         };
@@ -53,7 +55,7 @@ module.exports = class Game {
         this.pregameCount = 5 * 1000;
         this.originalRoles = [];
         this.emojis = emojis;
-
+        this.kickAgrees = {};
         if (isPrivate)
             global.games.private.push(this);
         else
@@ -137,7 +139,7 @@ module.exports = class Game {
             newPlayer.emit('playerList', parsedPlayerList);
 
             //Send the states
-            newPlayer.emit('state', this.state, this.day, this.stateCount);
+            newPlayer.emit('state', this.state, this.day, this.stateCount,this.kickPhase, this.kickPhaseCountDownStarted,this.kickAgrees);
 
             //Make a pregame meeting if one doesn't exist yet
             let pregame;
@@ -223,7 +225,7 @@ module.exports = class Game {
                             emojis: p.swappedWith ? p.swappedWith.user.emojis : p.user.emojis
                         };
                     }));
-                    player.emit('state', this.state, this.day, this.stateCount);
+                    player.emit('state', this.state, this.day, this.stateCount,this.kickPhase, this.kickPhaseCountDownStarted,this.kickAgrees);
                     player.emit('stateMods', this.stateMods);
 
                     //Send disguiser to relevant players
@@ -455,7 +457,8 @@ module.exports = class Game {
             this.emit('time', time);
     }
 
-    nextState () {//Go to the next state of the game
+    nextState () {
+        //Go to the next state of the game
         //Stop all timers
         for (let timerName in this.timers) {
             if (this.timers[timerName]) {
@@ -466,7 +469,9 @@ module.exports = class Game {
 
         //Finish meetings
         let nextState;
-        this.finishMeetings();
+        // save player vote history
+        let votedPlayers = this.meetings.map(meeting=>meeting.votes)
+            .map(votes=>Object.keys(votes)).reduce((a,b)=>a.concat(b))
 
         //Determine which state is next
         switch (this.state) {
@@ -487,14 +492,135 @@ module.exports = class Game {
                 break;
         }
 
-        //Process actions from the previous state
-        if (nextState != 'sunset') {
-            this.events.emit('actionQueueNext', this.actionQueue[0]);
-            this.processActionQueue();
-        }
-        this.events.emit('afterActions', nextState);
+
 
         //Check if anyone has won yet
+        if(this.state == 'pregame') {
+            this.finishMeetings();
+            //Process actions from the previous state
+            if (nextState != 'sunset') {
+                this.events.emit('actionQueueNext', this.actionQueue[0]);
+                this.processActionQueue();
+            }
+            this.events.emit('afterActions', nextState);
+            this.moveForwardToNextState();
+        }
+        else if(this.kickPhase){
+            //TODO process kick phase end
+            this.kickPhase = false;
+            this.kickPhaseCountDownStarted = false;
+            this.kickAgrees = {};
+            let unvotedPlayers = this.getUnvotedAlivePlayer(votedPlayers,this.state);
+            if(!unvotedPlayers.length) {
+                this.finishMeetings();
+                if (nextState != 'sunset') {
+                    this.events.emit('actionQueueNext', this.actionQueue[0]);
+                    this.processActionQueue();
+                }
+                this.events.emit('afterActions', nextState);
+                this.moveForwardToNextState();
+            }
+            else{
+                  // kick unvotedPlayers & checkWinCondition & finishing game
+                   unvotedPlayers.forEach(player=>{
+                       player.kick();
+                   });
+                   this.checkWinConditions(true,()=>{
+                       this.finishMeetings();
+                       if (nextState != 'sunset') {
+                           this.events.emit('actionQueueNext', this.actionQueue[0]);
+                           this.processActionQueue();
+                       }
+                       this.events.emit('afterActions', nextState);
+                       this.moveForwardToNextState();
+                   });
+
+            }
+
+        }
+        else{
+            //TODO process kick phase start
+
+            if(this.haveUnvotedAlivePlayer(votedPlayers,this.state)){
+                    // TODO move forward to kick phase
+                    this.kickPhase = true;
+                    this.alivePlayerCount = this.players.filter(player=>player.alive).length;
+                    this.players.forEach(player=>{
+                        player.emit('start-kick-phase',this.alivePlayerCount,this.kickAgrees);
+                    })
+            } else{
+                this.finishMeetings();
+                //Process actions from the previous state
+                if (nextState != 'sunset') {
+                    this.events.emit('actionQueueNext', this.actionQueue[0]);
+                    this.processActionQueue();
+                }
+                this.events.emit('afterActions', nextState);
+                this.moveForwardToNextState();
+            }
+
+        }
+    }
+    hasNightRole(player){
+        let playerStates = player.role.roleCards.map(roleCard=>Object.values(roleCard.meetings))
+            .reduce((a,b)=>a.concat(b)).map(meeting=>meeting.state)
+        return playerStates.indexOf('night') > -1;
+
+    }
+    haveUnvotedAlivePlayer(votedPlayers,state){
+        if(state == 'day') {
+            let alivedAndUnvotedPlayers = this.players.filter(player => player.alive && votedPlayers.indexOf(player.id) == -1);
+            return alivedAndUnvotedPlayers.length;
+        } else{
+            let alivedAndUnvotedPlayers = this.players.filter(player => player.alive && this.hasNightRole(player) && votedPlayers.indexOf(player.id) == -1);
+            return alivedAndUnvotedPlayers.length;
+        }
+    }
+    getUnvotedAlivePlayer(votedPlayers,state){
+        if(state == 'day') {
+            let alivedAndUnvotedPlayers = this.players.filter(player => player.alive && votedPlayers.indexOf(player.id) == -1);
+            return alivedAndUnvotedPlayers;
+        } else{
+            let alivedAndUnvotedPlayers = this.players.filter(player => player.alive && this.hasNightRole(player) && votedPlayers.indexOf(player.id) == -1);
+            return alivedAndUnvotedPlayers;
+        }
+    }
+    kickAgree(user){
+        this.kickAgrees[user.player.id] = true;
+        if(Object.keys(this.kickAgrees).length == Math.min(3,Math.floor(this.players.filter(player=>player.alive).length/2)))
+        {
+            // this game should be go to automatic kick countdown.
+            this.kickPhaseCountDownStarted = true;
+            this.timers.main = new Timer(() => {this.nextState()}, 15000);
+            this.alivePlayerCount = this.players.filter(player=>player.alive).length;
+            this.players.forEach(player=>{
+                player.emit('kick_countdown_start',this.alivePlayerCount,this.kickAgrees)
+            });
+        } else{
+            this.players.forEach(player=>{
+                player.emit('kick_count_change',this.alivePlayerCount,this.kickAgrees)
+            });
+        }
+    }
+    moveForwardToNextState(){
+        let nextState;
+        switch (this.state) {
+            case 'pregame':
+                nextState = this.setup.startState || 'night';
+                break;
+            case 'day':
+                if (this.stateExists('sunset'))
+                    nextState = 'sunset';
+                else
+                    nextState = 'night';
+                break;
+            case 'sunset':
+                nextState = 'night';
+                break;
+            case 'night':
+                nextState = 'day';
+                break;
+        }
         this.checkWinConditions(false, () => {
             this.events.emit('beforeState', nextState);
 
@@ -537,9 +663,9 @@ module.exports = class Game {
 
             //Emit the state update and time, make new meetings, and send queued alerts from previous state
             let state = this.getState(this.state);
-            this.emit('state', this.state, this.day, this.stateCount);
+            this.emit('state', this.state, this.day, this.stateCount,this.kickPhase, this.kickPhaseCountDownStarted,this.kickAgrees);
             this.emit('time', state.length);
-            this.events.emit('state', this.state, this.day, this.stateCount);
+            this.events.emit('state', this.state, this.day, this.stateCount,this.kickPhase, this.kickPhaseCountDownStarted,this.kickAgrees);
             this.makeMeetings();
             this.processAlertQueue();
             this.timers.main = new Timer(() => {this.nextState()}, state.length);
@@ -912,7 +1038,7 @@ module.exports = class Game {
         this.finished = true;
         this.state = 'post';
         this.stateCount++;
-        this.emit('state', this.state, this.day, this.stateCount);
+        this.emit('state', this.state, this.day, this.stateCount,this.kickPhase, this.kickPhaseCountDownStarted,this.kickAgrees);
         this.emit('meetings', []);
         this.processAlertQueue();
         this.events.emit('endGame');

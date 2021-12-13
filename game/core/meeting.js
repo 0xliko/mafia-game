@@ -311,7 +311,7 @@ module.exports = class Meeting {
                     highest.targets.push(target);
             }
             // modified by lyu.
-            // remote random player kill
+            // remove random player kill
             if(highest.votes > this.members.filter(member=>member.player.alive).length / 2  && highest.targets[0] != '*'){
                finalTarget = highest.targets[0];
             } else{

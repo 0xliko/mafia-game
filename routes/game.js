@@ -329,7 +329,8 @@ router.post('/manage', async function (req, res, next) {
                             res.send({error: 'You must choose roles for your chosen alignments'});
                         }
                     }
-                } else if (Array.isArray(roles)) { //Open role setups
+                }
+                else if (Array.isArray(roles)) { //Open role setups
                     create = true;
 
                     for (let roleset of roles) {

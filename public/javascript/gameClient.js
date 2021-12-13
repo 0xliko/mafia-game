@@ -12,6 +12,9 @@ class Game {
         this.ranked = false;
         this.private = false;
         this.state = 'pregame';
+        this.kickPhase = false;
+        this.kickPhaseCountDownStarted = false;
+        this.kickCliked = false;
         this.day = 0;
         this.voted = {};
         this.development = true;
@@ -120,13 +123,12 @@ class Game {
     thirtySecAlert(){
       console.log(this.state,"secAlert");
       if(this.state == 'day'){
-
           if(!this.voted[`${this.state}_${this.day}`]){
               $(".console-list").append(`<div class="msg-content msg-server">You didn't vote yet</div>`);
               this.autoScroll();
           }
       } else if(this.state == 'night'){
-          if(["Cop","Doctor","Chemist","Disguiser", "Driver", "Godfather", "Hooker", "Lawyer", "Mafioso", "Spy", "Stalker"].indexOf(this.role) > -1){
+          if(!this.voted[`${this.state}_${this.day}`] && ["Cop","Doctor","Chemist","Disguiser", "Driver", "Godfather", "Hooker", "Lawyer", "Mafioso", "Spy", "Stalker"].indexOf(this.role) > -1){
               $(".console-list").append(`<div class="msg-content msg-server">You didn't vote yet</div>`);
               this.autoScroll();
           }
@@ -331,6 +333,11 @@ class Game {
             });
         });
 
+        $(".kick-phase-status").on('click','.kick',()=>{
+            this.kickCliked = true;
+            this.socket.emit('kick_agree');
+            this.renderKickPhase();
+        })
         //Autoscroll
         let messages = $('.speech-display')[0];
         $(messages).scroll(() => {
@@ -514,6 +521,8 @@ class Game {
 
             if (this.stateView == this.stateCount)
                 this.renderMeetingTabs();
+            this.renderKickPhase();
+
         });
 
         socket.on('meeting', meeting => {
@@ -529,6 +538,8 @@ class Game {
                 this.renderMeetingTabs();
                 this.switchMeeting(meeting.id);
             }
+            this.renderKickPhase();
+
         });
 
         socket.on('vote', (vote) => {
@@ -558,6 +569,7 @@ class Game {
 
             if (!meeting.instant && this.settings.votingLog)
                 this.showAlert(`${voter.name} votes ${target}`, true, vote.time);
+            this.renderKickPhase();
         });
 
         socket.on('unvote', (playerId, meetingId, time) => {
@@ -591,12 +603,11 @@ class Game {
                 $('.edit-will').show();
         });
 
-        socket.on('state', (state, day, count) => {
+        socket.on('state', (state, day, count,kickPhase,kickPhaseCountDownStarted,kickAgrees) => {
 
-            this.devlog('--- State ---');
+            console.log('--- State ---',kickPhase,kickPhaseCountDownStarted,kickAgrees);
             this.devlog(state);
             this.devlog(day);
-
             for (let meeting of this.meetings) {
                 this.history[this.stateCount].meetings[meeting.id] = {
                     id: meeting.id,
@@ -617,14 +628,18 @@ class Game {
 
             this.state = state;
             this.day = day;
+            this.kickPhase = kickPhase;
+            this.kickPhaseCountDownStarted = kickPhaseCountDownStarted;
             this.stateCount = count;
+            this.kickAgrees = kickAgrees;
             this.stateView = count;
             this.meetings = [];
             this.alerts = [];
             if (state != 'pregame' && state != 'post')
               $(".console-list").append(`<div class="msg-content msg-server">${capitalize(state)} ${day} started</div>`);
             this.renderState();
-
+            this.renderKickPhase();
+            // this.renderAction();
             $('body').attr('class', state.split(' ').join('-'));
             $('.logo').attr('class', `logo ${state.split(' ').join('-')}`);
 
@@ -685,6 +700,7 @@ class Game {
         });
 
         socket.on('time', time => {
+            console.log('_______time________', time)
             this.devlog('--- Time ---',time);
             this.devlog(time);
 
@@ -707,6 +723,55 @@ class Game {
             let state = this.history[this.stateCount];
             if (player) {
                 $(".dead-message").text(`Player ${player.name} was Killed!`)
+                $("#deadAlertModal").modal();
+                setTimeout(()=>{
+                    $("#deadAlertModal").modal('hide');
+                },4000)
+                player.alive = false;
+
+            }
+
+            if (instant) {
+                for (let meeting of this.meetings) {
+                    if (playerId == this.self)
+                        meeting.canVote = false;
+
+                    for (let i in meeting.targets) {
+                        if (meeting.targets[i] == playerId)
+                            meeting.targets.splice(i, 1);
+                    }
+
+                    for (let voterId in meeting.votes) {
+                        if (voterId == playerId && !meeting.instant)
+                            delete meeting.votes[voterId];
+
+                        if (meeting.votes[voterId] == playerId && !meeting.instant)
+                            delete meeting.votes[voterId];
+                    }
+                }
+            }
+
+            this.renderAllActions();
+            if (this.stateView == this.stateCount)
+                this.renderAllPlayers();
+
+            state.deaths.push(playerId);
+            if (state.revives.indexOf(playerId) != -1)
+                state.revives.splice(state.revives.indexOf(playerId), 1);
+
+            if (playerId == this.self)
+                this.setSpeech(false);
+        });
+
+        socket.on('kick', (playerId, instant) => {
+
+            this.devlog('--- Dead ---');
+            this.devlog(playerId);
+
+            let player = this.getPlayer(playerId);
+            let state = this.history[this.stateCount];
+            if (player) {
+                $(".dead-message").text(`Player ${player.name} was kicked!`)
                 $("#deadAlertModal").modal();
                 setTimeout(()=>{
                     $("#deadAlertModal").modal('hide');
@@ -936,8 +1001,58 @@ class Game {
             // window.location='/'
             // $('.game-info').append(`<button class='rehost btn btn-primary raydium-theme-button active'>Rehost</button>`);
         });
-    }
 
+        socket.on('start-kick-phase',(alivePlayerCount,kickAgrees)=>{
+          this.kickPhase = true;
+          this.kickAgrees = kickAgrees;
+          this.renderKickPhase();
+        });
+        socket.on('kick_count_change',(alivePlayerCount,kickAgrees)=>{
+            this.kickAgrees = kickAgrees;
+            this.renderKickPhase();
+        });
+        socket.on('kick_countdown_start',(alivePlayerCount,kickAgrees)=>{
+            this.kickPhaseCountDownStarted = true;
+            this.kickAgrees = kickAgrees;
+            this.renderActionDisable();
+            this.renderKickPhase();
+            this.clock.setTime(15000);
+            this.clock.start();
+        });
+
+    }
+    renderActionDisable(){
+        if(this.voted[`${this.state}_${this.day}`])
+           $(".action-drop .dropdown-toggle").addClass('disabled');
+    }
+    renderKickPhase(){
+
+        let alivePlayerCount = this.players.filter(player=>player.alive).length;
+        this.maximunKickCount = Math.min(3,Math.floor(alivePlayerCount/2));
+        if(this.kickPhase && !this.kickPhaseCountDownStarted){
+            // if voted already or dont' have night role at night, will have kick button
+            // also if you already clicked kick button, button will be disabled.
+            console.log(this.kickCliked,this.voted,this.state,this.meetings, "this meetings on render kick_phase function");
+            if(!this.kickCliked && (this.voted[`${this.state}_${this.day}`] || (this.state == 'night' && !this.meetings.length)))
+            {
+                $(".kick-phase-status").html(`<button class='kick btn btn-simple raydium-theme-button active'>
+                    Kick ${new Array(this.maximunKickCount-Object.keys(this.kickAgrees).length).fill('X').join(' ')}
+                </button>`)
+            }
+            else{
+                $(".kick-phase-status").html(`<div class='raydium-theme-button active'>
+                    Kick ${new Array(this.maximunKickCount-Object.keys(this.kickAgrees).length).fill('X').join(' ')}
+                </div>`)
+            }
+        }
+        else{
+                $(".kick-phase-status").html(``);
+        }
+
+        if(this.kickPhaseCountDownStarted){
+
+        }
+    }
     getPlayer (id) {
         if (id == '*')
             return {name: 'no one'};
@@ -1161,6 +1276,7 @@ class Game {
                 }
             }
         }
+
     }
 
     renderAllPlayers (state) {
@@ -1269,6 +1385,7 @@ class Game {
 
     renderAction (meeting) {
         let disabled = !meeting.targets || !meeting.targets.length || (meeting.instant && Object.keys(meeting.votes).length);
+        disabled = disabled || (this.kickPhaseCountDownStarted && this.voted[`${this.state}_${this.day}`])
         let action = $(`
             <div class='action' data-meeting='${meeting.id}'>
                 <div class='action-drop dropdown'>
@@ -1319,10 +1436,13 @@ class Game {
                 let voter = this.getPlayer(voterId);
                 let target = meeting.targetType == 'player' ? this.getPlayer(meeting.votes[voterId]).name : meeting.votes[voterId];
                 action.find(`[data-voter='${voterId}']`).html(`${voterId == this.self ? 'You vote' : inHTMLData(voter.name) + ' votes'} <span class='vote-choice'>${inHTMLData(target)}</span>`);
+                if(voterId == this.self)
+                    this.voted[`${this.state}_${this.day}`] = true;
             }
         }
 
         $('.action-list').append(action);
+
     }
 
     renderPlayer (player) {
