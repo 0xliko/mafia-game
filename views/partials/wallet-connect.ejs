@@ -1,15 +1,5 @@
-<% var wallet_url = process.env.NODE_ENV=='development'?'http://127.0.0.1:3001/wallet-connect':'/wallet-connect' %>
-<div class='modal fade' id='walletModal' tabindex='-1'>
-        <div class='modal-dialog'>
-
-                <div class='modal-content'>
-                        <div class='modal-body'>
-                                <iframe src="<%= wallet_url %>" data-mode="<%= process.env.NODE_ENV || 'production' %>"></iframe>
-                        </div>
-
-                </div>
-        </div>
-</div>
+<% var wallet_js_url = process.env.NODE_ENV=='development'?'http://127.0.0.1:3001/wallet-connect/bundle.js':'/wallet-connect/bundle.js' %>
+<script src="<%=wallet_js_url%>"></script>
 <div class='modal fade' id='pickNFTModal' tabindex='-1'>
         <div class='modal-dialog'>
                 <div class='modal-content'>
