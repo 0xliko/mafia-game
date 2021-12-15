@@ -51,79 +51,46 @@ $.get('/nextRestart', function (minutes) {
 });
 
 (function(){
-    $(".wallet-connect").click(function(){
-        const mode =  $("#walletModal iframe").data('mode');
-        const iframe = $("#walletModal iframe")[0];
-        iframe.contentWindow.postMessage({type:'openWalletModal',curUrl:location.href},$("#walletModal iframe").attr('src'));
-        $("#walletModal").modal();
-    });
-    window.addEventListener('message',function(e){
-        const data = e.data;
-        if(data.type == 'heightChanged'){
-            const height = e.data.height;
-            $(".modal-body").height(height)
-        } else if(data.type == 'closeDialog'){
-            console.log("hide dialog")
-            $("#walletModal").modal('hide');
-        } else if(data.type == 'walletConnected'){
-            console.log("wallet connected")
-            window.walletInfo = data;
-            function renderImages(response){
 
-                if($("#walletModal").hasClass("show")){
-                    $("#walletModal").modal('hide');
-                } else{
-                    $("#walletModal").one("shown.bs.modal",function(){
-                        $("#walletModal").modal('hide');
-                    })
-                }
-                $("#pickNFTModal").modal();
-                $("#pickNFTModal .modal-body").html('');
-                if(response.nfts && response.nfts.length){
-                    response.nfts.forEach((nft)=>{
-                        $("#pickNFTModal .modal-body").append(`<a> <img alt="${nft.arweave_metadata.name}" src="${nft.arweave_metadata.image}"></img> <label>${nft.arweave_metadata.name}</label></a>`);
+     window.fetchNFTS  = function(data) {
+         function renderImages(response) {
 
-                    })
-                } else{
-                    $("#pickNFTModal .modal-body").html('Please buy any nft image for your profile');
-                }
-            }
-            $.get(`https://cryptomafia-api-nft-viewer-owivntwoka-uk.a.run.app/fetch_nft_data?address=${data.address}`)
-                .done(function(res){
-                    if(res.length || (res.nfts && res.nfts.length))
-                      renderImages(res);
-                    else{
-                        $.get(`https://cryptomafia-api-nft-viewer-owivntwoka-uk.a.run.app/fetch_nft_data?address=${data.address}`)
-                            .done(function(res){
-                                renderImages(res)
-                            }).fail(function(err){
+             $("#pickNFTModal .modal-body").html('');
+             if (response.nfts && response.nfts.length) {
+                 response.nfts.forEach((nft) => {
+                     $("#pickNFTModal .modal-body").append(`<a> <img alt="${nft.arweave_metadata}" src="${nft.arweave_metadata}"></img> <label>${nft.token_metadata.tokenInfo.name}</label></a>`);
 
-                        })
-                    }
+                 })
+             } else {
+                 $("#pickNFTModal .modal-body").html('Please buy any nft image for your profile');
+             }
+         }
 
-                }).fail(function(err){
-                        $.get(`https://cryptomafia-api-nft-viewer-owivntwoka-uk.a.run.app/fetch_nft_data?address=${data.address}`)
-                            .done(function(res){
-                                renderImages(res)
-                            }).fail(function(err){
+         $.get(`https://cryptomafia-api-nft-viewer-owivntwoka-uk.a.run.app/fetch_nft_data?address=${data.address}`)
+             .done(function (res) {
+                 if (res.length || (res.nfts && res.nfts.length))
+                     renderImages(res);
+                 else {
+                     $.get(`https://cryptomafia-api-nft-viewer-owivntwoka-uk.a.run.app/fetch_nft_data?address=${data.address}`)
+                         .done(function (res) {
+                             renderImages(res)
+                         }).fail(function (err) {
 
-                            })
-                })
+                     })
+                 }
 
+             }).fail(function (err) {
+             $.get(`https://cryptomafia-api-nft-viewer-owivntwoka-uk.a.run.app/fetch_nft_data?address=${data.address}`)
+                 .done(function (res) {
+                     renderImages(res)
+                 }).fail(function (err) {
 
-
-        } else if(data.type == 'WalletConnectionErrorByUser'){
-            $("#walletModal").modal('hide');
-            $.toast(`Wallet connection denied by user <a class='
-            toast-action close'>&times;</a>` , 300000, function () { });
-        } else if(data.type == 'WalletNotReadyError'){
-            $("#walletModal").modal('hide');
-            $.toast(`This wallet isn't ready yet <a class='
-            toast-action close'>&times;</a>` , 3000, function () { });
-            console.log("WalletNotReadyError",data)
-        }
-    });
-    $("#pickNFTModal .modal-body").on('click',"a",function(){
+             })
+         });
+         $("#pickNFTModal .modal-body").html('Your NFT images will be here');
+         $("#pickNFTModal").modal();
+     }
+     $("#pickNFTModal .modal-body").on('click',"a",function(){
         const imgUrl = $("img",this).attr('src');
         localStorage.setItem("profileImg",imgUrl);
         $("#pickNFTModal").modal('hide');

@@ -1,6 +1,6 @@
 import { WalletAdapterNetwork, WalletError } from '@solana/wallet-adapter-base';
-import {ConnectionProvider, useWallet, WalletProvider} from '@solana/wallet-adapter-react';
-import { WalletModalProvider ,WalletModal} from '@solana/wallet-adapter-react-ui';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import {
     getLedgerWallet,
     getPhantomWallet,
@@ -11,16 +11,17 @@ import {
     getTorusWallet,
 } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
-import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import Navigation from './Navigation';
 import Notification from './Notification';
 
-
 const Wallet: FC = () => {
     const network = WalletAdapterNetwork.Devnet;
     const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-    const [ parentUrl,setParentUrl ] = useState('');
+
+    // @solana/wallet-adapter-wallets imports all the adapters but supports tree shaking --
+    // Only the wallets you want to support will be compiled into your application
     const wallets = useMemo(
         () => [
             getPhantomWallet(),
@@ -37,34 +38,21 @@ const Wallet: FC = () => {
     );
 
     const onError = useCallback(
-        (error: WalletError) =>{
-           console.log(error.name,error.message,error.error);
-           if(error.name == 'WalletConnectionError' && error.error.code == 4001) {
-               if(parentUrl){
-                   window.parent.postMessage({type: 'WalletConnectionErrorByUser'}, parentUrl);
-               }
-           } else if(error.name == 'WalletNotReadyError'){
-               if(parentUrl){
-                   window.parent.postMessage({type: 'WalletNotReadyError'}, parentUrl);
-               }
-           }
-        },
-        [parentUrl]
+        (error: WalletError) =>
+            toast.custom(
+                <Notification
+                    message={error.message ? `${error.name}: ${error.message}` : error.name}
+                    variant="error"
+                />
+            ),
+        []
     );
-    const modalActivated = (url:string)=>{
-        setParentUrl(url);
-    }
+
     return (
         <ConnectionProvider endpoint={endpoint}>
-            <WalletProvider wallets={wallets} onError={onError}>
-                <div className="connecting">
-                    <div className="connecting-body">
-                        <div className="connecting-icon"></div>
-                        <label>Connecting ...</label>
-                    </div>
-                </div>
+            <WalletProvider wallets={wallets} onError={onError} autoConnect>
                 <WalletModalProvider>
-                    <Navigation modalActivated={modalActivated}/>
+                    <Navigation />
                 </WalletModalProvider>
                 <Toaster position="bottom-left" reverseOrder={false} />
             </WalletProvider>

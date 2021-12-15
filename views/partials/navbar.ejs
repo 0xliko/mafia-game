@@ -11,7 +11,7 @@
         <nav>
             <a class="nav-link-right <%= route == 'loggedouty' ? 'active' : '' %>" href="/">Home</a>
             <% if (dId) { %>
-                 <a class="nav-link-right wallet-connect" href="#">Wallet Connect</a>
+                 <a class="nav-link-right wallet-connect" href="#"></a>
             <% } %>
             <a class="nav-link-right <%= route == 'loggedout' ? 'active' : '' %>" href="<%= dId != null ? '/logout' : '/login' %>"><%= dId != null ? 'Logout' : 'Login' %></a>
         </nav>
