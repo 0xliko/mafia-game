@@ -114,12 +114,13 @@ module.exports = class Player {
 
         if (true) {
             this.game.sendAlert(deathmessage);
-            this.game.lastDeathMessage = deathmessage;
+            // this.game.lastDeathMessage = deathmessage;
             if (lastWill)
                 this.game.sendAlert(lastWill);
         }
 
         //Send to the clients that the player is dead
+        console.log(this,"kicked")
         this.game.emit('kick', this.id, true);
 
         //Reveal the player's role to the clients

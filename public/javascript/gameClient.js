@@ -14,10 +14,8 @@ class Game {
         this.state = 'pregame';
         this.kickPhase = false;
         this.kickPhaseCountDownStarted = false;
-        this.kickCliked = false;
         this.day = 0;
-        this.voted = {};
-        this.development = true;
+        this.development = false;
         this.stateCount = 0;
         this.stateView = 0;
         this.stateMods = {};
@@ -123,12 +121,13 @@ class Game {
     thirtySecAlert(){
       console.log(this.state,"secAlert");
       if(this.state == 'day'){
-          if(!this.voted[`${this.state}_${this.day}`]){
+          if(!this.userVoted()){
               $(".console-list").append(`<div class="msg-content msg-server">You didn't vote yet</div>`);
               this.autoScroll();
           }
       } else if(this.state == 'night'){
-          if(!this.voted[`${this.state}_${this.day}`] && ["Cop","Doctor","Chemist","Disguiser", "Driver", "Godfather", "Hooker", "Lawyer", "Mafioso", "Spy", "Stalker"].indexOf(this.role) > -1){
+          let voted = this.userVoted();
+          if(!voted && ["Cop","Doctor","Chemist","Disguiser", "Driver", "Godfather", "Hooker", "Lawyer", "Mafioso", "Spy", "Stalker"].indexOf(this.role) > -1){
               $(".console-list").append(`<div class="msg-content msg-server">You didn't vote yet</div>`);
               this.autoScroll();
           }
@@ -334,9 +333,7 @@ class Game {
         });
 
         $(".kick-phase-status").on('click','.kick',()=>{
-            this.kickCliked = true;
             this.socket.emit('kick_agree');
-            this.renderKickPhase();
         })
         //Autoscroll
         let messages = $('.speech-display')[0];
@@ -396,7 +393,7 @@ class Game {
 
         socket.on('msg', (message) => {
             this.devlog('--- Message ---');
-            this.devlog(message);
+            console.log(message);
 
             let meeting, sender;
             if (message.meeting) {
@@ -562,8 +559,7 @@ class Game {
             }
 
             voteDisp.html(`${voter.id == this.self ? 'You vote' : inHTMLData(voter.name) + ' votes'} <span class='vote-choice'>${inHTMLData(target)}</span>`);
-            this.voted = this.voted || {};
-            this.voted[`${this.state}_${this.day}`] = true;
+
             if (meeting.instant)
                 $(`.action[data-meeting='${vote.meeting}']`).find('.dropdown-toggle').addClass('disabled');
 
@@ -894,6 +890,7 @@ class Game {
 
             this.renderAllActions();
             this.renderMeetingTabs();
+            this.renderKickPhase()
         });
 
         socket.on('will', will => {
@@ -1021,27 +1018,34 @@ class Game {
         });
 
     }
+    userVoted(){
+        let voters = Object.values((this.history[this.stateView] || {meetings: {}}).meetings).map(meeting=>Object.keys(meeting.votes))
+        if(voters.length)
+            voters = voters.reduce((a,b)=>a.concat(b))
+        return voters.indexOf(this.self) > -1;
+    }
     renderActionDisable(){
-        if(this.voted[`${this.state}_${this.day}`])
+        if(this.userVoted())
            $(".action-drop .dropdown-toggle").addClass('disabled');
+    }
+    kickAgreed(){
+        return Object.keys(this.kickAgrees).indexOf(this.self) > -1;
     }
     renderKickPhase(){
 
         let alivePlayerCount = this.players.filter(player=>player.alive).length;
         this.maximunKickCount = Math.min(3,Math.floor(alivePlayerCount/2));
+        let voted = this.userVoted();
         if(this.kickPhase && !this.kickPhaseCountDownStarted){
-            // if voted already or dont' have night role at night, will have kick button
-            // also if you already clicked kick button, button will be disabled.
-            console.log(this.kickCliked,this.voted,this.state,this.meetings, "this meetings on render kick_phase function");
-            if(!this.kickCliked && (this.voted[`${this.state}_${this.day}`] || (this.state == 'night' && !this.meetings.length)))
+            if(!this.kickAgreed() && (voted || (this.state == 'night' && !this.meetings.length)))
             {
                 $(".kick-phase-status").html(`<button class='kick btn btn-simple raydium-theme-button active'>
-                    Kick ${new Array(this.maximunKickCount-Object.keys(this.kickAgrees).length).fill('X').join(' ')}
+                    Kick ${new Array(this.maximunKickCount-Object.keys(this.kickAgrees).length).fill('×').join(' ')}
                 </button>`)
             }
             else{
-                $(".kick-phase-status").html(`<div class='raydium-theme-button active'>
-                    Kick ${new Array(this.maximunKickCount-Object.keys(this.kickAgrees).length).fill('X').join(' ')}
+                $(".kick-phase-status").html(`<div class='kick-alert'>
+                    Kick ${new Array(this.maximunKickCount-Object.keys(this.kickAgrees).length).fill('×').join(' ')}
                 </div>`)
             }
         }
@@ -1384,8 +1388,11 @@ class Game {
     }
 
     renderAction (meeting) {
+
         let disabled = !meeting.targets || !meeting.targets.length || (meeting.instant && Object.keys(meeting.votes).length);
-        disabled = disabled || (this.kickPhaseCountDownStarted && this.voted[`${this.state}_${this.day}`])
+
+        disabled = disabled || (this.kickPhaseCountDownStarted && this.userVoted())
+
         let action = $(`
             <div class='action' data-meeting='${meeting.id}'>
                 <div class='action-drop dropdown'>
@@ -1416,12 +1423,7 @@ class Game {
             }
 
         }
-        /*if(this.role == 'Doctor' && this.state == 'night'){
-            if($(`.vote-target[data-target="${this.self}"]`).length == 0) {
-                let targetHtml = $(`<div class='dropdown-item vote-target ${meeting.votes[this.self] == this.self ? 'vote-sel' : ''}' data-target='${this.self}' data-meeting='${meeting.id}'>You</div>`);
-                targets.append(targetHtml);
-            }
-        }*/
+
         if (meeting.members) {
             // console.log(JSON.stringify(meeting.members), this.role,"members")
             for (let member of meeting.members) {
@@ -1436,8 +1438,6 @@ class Game {
                 let voter = this.getPlayer(voterId);
                 let target = meeting.targetType == 'player' ? this.getPlayer(meeting.votes[voterId]).name : meeting.votes[voterId];
                 action.find(`[data-voter='${voterId}']`).html(`${voterId == this.self ? 'You vote' : inHTMLData(voter.name) + ' votes'} <span class='vote-choice'>${inHTMLData(target)}</span>`);
-                if(voterId == this.self)
-                    this.voted[`${this.state}_${this.day}`] = true;
             }
         }
 
@@ -1466,7 +1466,7 @@ class Game {
             playerHtml.find('.role').hide();
 
         if (player.role) {
-            console.log('player role______')
+
             playerHtml.find('.poptag').popover({container: $(".site-wrapper,.game-container") , placement: function(popover,dom,context){
                     const domPosition = $(dom)[0].getBoundingClientRect();
                     const containerPosition = $(".site-wrapper,.game-container")[0].getBoundingClientRect();
@@ -1580,7 +1580,7 @@ class Game {
 
         let msgContent = messageHtml.find('.msg-content');
         msgContent.html(insertEmojis(msgContent.html(), this.serverEmojis.concat(sender ? sender.emojis : [])));
-        console.log(msg);
+
         if(!msg.server){
             $('.speech-display').append(messageHtml);
         }

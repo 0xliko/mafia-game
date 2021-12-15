@@ -587,9 +587,10 @@ module.exports = class Game {
     }
     kickAgree(user){
         this.kickAgrees[user.player.id] = true;
+
+        // this game should be go to automatic kick countdown.
         if(Object.keys(this.kickAgrees).length == Math.min(3,Math.floor(this.players.filter(player=>player.alive).length/2)))
         {
-            // this game should be go to automatic kick countdown.
             this.kickPhaseCountDownStarted = true;
             this.timers.main = new Timer(() => {this.nextState()}, 15000);
             this.alivePlayerCount = this.players.filter(player=>player.alive).length;
