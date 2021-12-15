@@ -649,3 +649,26 @@ speech-display::-webkit-scrollbar-thumb:hover{
   align-items: center;
   justify-content: center;
 }
+.music_control_container{
+   margin-right: 10px;
+}
+.music_control_container .sound_control{
+   cursor: pointer;
+   background-size: 100% 100% !important;
+   background-repeat: no-repeat !important;
+   display: block;
+   width: 20px;
+   height: 20px;
+   border-radius: 50%;
+}
+.music_control_container .sound_on{
+  background: url("../images/mute.png");
+
+}
+.music_control_container .sound_off{
+  background: url("../images/unmute.png");
+}
+
+.music_control_container .sound_control.hidden{
+  display: none;
+}

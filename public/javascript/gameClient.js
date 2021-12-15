@@ -65,9 +65,20 @@ class Game {
         this.bgAudio.volume = 0.05
         this.bgAudio.loop = true;
         $("body").click();
-        setTimeout(()=>{
-            this.bgAudio.play()
-        },1000)
+
+        let promise  =  this.bgAudio.play()
+        $(".music_control_container .sound_control").addClass("hidden");
+        if (promise !== undefined) {
+            promise.then(_ => {
+                // Autoplay started!
+                $(".sound_on").removeClass("hidden")
+            }).catch(error => {
+                // Autoplay was prevented.
+                // Show a "Play" button so that user can start playback.
+                $(".sound_off").removeClass("hidden")
+                console.log("playing .... ")
+            });
+        }
 
 
         this.settings = {};
@@ -141,6 +152,14 @@ class Game {
             $('.speech-input').focus();
         });
 
+        $(".sound_control").click((e)=>{
+            $(".sound_control").toggleClass("hidden");
+            if($(e.target).attr("state") == 'off'){
+               this.bgAudio.play();
+            } else{
+                this.bgAudio.pause();
+            }
+        })
         $('.speech-input').on('keypress', e => {
             let message = $('.speech-input').val();
             if (e.key == 'Enter' && message.length) {
