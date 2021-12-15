@@ -644,3 +644,8 @@ speech-display::-webkit-scrollbar-thumb:hover{
   padding-left: 10px;
   align-self: flex-start;
 }
+.kick-phase-status{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
