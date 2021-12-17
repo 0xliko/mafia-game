@@ -650,6 +650,7 @@ speech-display::-webkit-scrollbar-thumb:hover{
   justify-content: center;
 }
 .music_control_container{
+   margin-left: 10px;
    margin-right: 10px;
 }
 .music_control_container .sound_control{
